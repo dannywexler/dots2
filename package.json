@@ -1,0 +1,20 @@
+{
+    "name": "dots2",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "build:boots": "esbuild ./boots/src/boots.ts --bundle --format=cjs --platform=node --outfile=./boots/bundle/boots.js",
+        "pkg:boots:l": "pkg ./boots/bundle/boots.js --out-path=./boots/bin -t linux",
+        "pkg:boots:w": "pkg ./boots/bundle/boots.js --out-path=./boots/bin -t win",
+        "pack:boots": "run-s build:boots pkg:boots:l pkg:boots:w"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "esbuild": "^0.17.10",
+        "npm-run-all": "^4.1.5",
+        "pkg": "^5.8.0"
+    }
+}
