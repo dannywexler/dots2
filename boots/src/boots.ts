@@ -1,5 +1,4 @@
 import 'zx/globals'
-import { fs } from 'zx'
 
 const myDots = '~/dots2/'
 void async function() {
@@ -12,7 +11,7 @@ void async function() {
 }()
 
 async function linuxSetup() {
-    cd(os.homedir())
+    // await $`cd ${os.homedir()}`
     echo('Installing Nix')
     await installNixHomeMgr()
     await cloneDots()
