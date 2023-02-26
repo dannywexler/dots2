@@ -7,7 +7,7 @@
         "build:boots": "esbuild ./boots/src/boots.ts --bundle --format=cjs --platform=node --outfile=./boots/bundle/boots.js",
         "pkg:boots:l": "pkg ./boots/bundle/boots.js --out-path=./boots/bin -t linux",
         "pkg:boots:w": "pkg ./boots/bundle/boots.js --out-path=./boots/bin -t win",
-        "pack:boots": "run-s build:boots pkg:boots:l pkg:boots:w"
+        "pack:boots": "run-s build:boots pkg:boots:l pkg:boots:w && rm ./boots/bundle/boots.js"
     },
     "keywords": [],
     "author": "",
