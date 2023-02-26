@@ -1,6 +1,8 @@
 import 'zx/globals'
 
-const myDots = '~/dots2/'
+const HOME = os.homedir()
+const myDots = `${HOME}/dots2/`
+
 void async function() {
     if (os.platform() === 'linux') {
         await linuxSetup()
@@ -29,8 +31,8 @@ async function installNixHomeMgr() {
 
 async function cloneDots() {
     await gitClone('dannywexler', 'dots2', myDots)
-    await fs.remove('~/.config/nixpkgs')
-    await fs.ensureSymlink(`${myDots}config/nixpkgs`, `~/.config/nixpkgs`)
+    await fs.remove(`${HOME}/.config/nixpkgs`)
+    await fs.ensureSymlink(`${myDots}config/nixpkgs`, `${HOME}/.config/nixpkgs`)
     await $`home-manager switch`
     echo('dots cloned and software installed')
 }
