@@ -1,10 +1,10 @@
-import 'zx/globals'
-$.verbose = false
+import 'zx/globals';
 
-const HOME = os.homedir()
-const myDots = `${HOME}/dots2/`
+const HOME = os.homedir();
+const myDots = `${HOME}/dots2/`;
 
 void async function() {
+    $.verbose = false;
     if (os.platform() === 'linux') {
         await linuxSetup()
     }
