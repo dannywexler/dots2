@@ -12,7 +12,7 @@ void async function() {
 }()
 
 async function linuxSetup() {
-    cd('~')
+    cd(os.homedir())
     echo('Installing Nix')
     await installNixHomeMgr()
     await cloneDots()
