@@ -8,5 +8,5 @@ home.packages = with pkgs; [
 neovim
 wezterm
 
-]
+];
 }
