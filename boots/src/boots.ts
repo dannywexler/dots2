@@ -50,6 +50,8 @@ async function cloneDots() {
     await $`ln -sf ${myDots}config/home-manager/* ${HOME}/.config/home-manager`
     echo('Installing all home manager packages')
     await $`home-manager switch`
+    echo('Linking applications')
+    await $`ln -sf ${HOME}.nix-profile/share/applications ${HOME}.local/share`
     echo('Dots cloned and home manager packages installed')
 }
 

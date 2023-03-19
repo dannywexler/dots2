@@ -1,4 +1,4 @@
-myZshDots="$HOME/dots/zsh/zshrc.sh"
+myZshDots="$HOME/dots2/config/zsh/zshrc.sh"
 if [ -f $myZshDots ]; then
     source $myZshDots
     # print "sourced zsh dots from $myZshDots"
