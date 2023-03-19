@@ -8,4 +8,5 @@ export const configMapping: ConfigMapping = {
     'fonts/': LINUX ? path.join(HOME, '.local', 'share', 'fonts') : false,
     git: LINUX,
     kitty: LINUX,
+    'config/zsh/.zshrc': LINUX ? path.join(HOME, '.zshrc') : false
 }

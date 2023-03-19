@@ -1,0 +1,6 @@
+alias dots='cd ~/dots && nvim'
+alias dots2='cd ~/dots2 && nvim'
+alias v='nvim'
+alias vc='cd ~/.config/nvim/ && nvim'
+alias zc='cd ~/dots/zsh/ && nvim'
+alias rustinstall='curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh'

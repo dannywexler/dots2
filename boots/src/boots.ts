@@ -49,6 +49,8 @@ async function cloneDots() {
 async function connectToNas() {
     echo('Connecting to NAS');
     for (const dir of ['archives', 'general', 'media']) {
+        echo('creating ', dir)
+        await $`sudo mkdir -p /nas/${dir}`
         await addLineToFile(`192.168.0.248:/mnt/user/${dir} /nas/${dir} nfs defaults 0 0`, '/etc/fstab')
     }
     echo('Connected to NAS')
@@ -60,16 +62,22 @@ async function gitClone(user: string, repo: string, dest?: string) {
 
 async function addLineToFile(line: string, file: string) {
     echo(`adding ${line} to ${file}`)
-    if (await $`grep -Fqsx -- "${line}" "${file}"`) {
-        echo('already there')
-        return
-    }
     try {
-        echo('trying to append without sudo first')
-        await $`echo ${line} >> ${file}`
+        if (await $`grep -Fqsx -- "${line}" "${file}"`) {
+            echo('already there')
+            return
+        }
+        try {
+            echo('trying to append without sudo first')
+            await $`echo ${line} >> ${file}`
+        }
+        catch (e) {
+            echo('that failed ', e)
+            echo('reruning with sudo tee')
+            await $`echo "${line}" | sudo tee -- append "${file}`
+        }
     }
     catch (e) {
-        echo('that failed, reruning with sudo tee')
-        await $`echo "${line}" | sudo tee -- append "${file}`
+        echo('error grepping ', e)
     }
 }
