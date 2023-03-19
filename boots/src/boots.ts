@@ -1,4 +1,5 @@
 import 'zx/globals';
+import { slinkAll } from '../../slink/slink'
 
 const HOME = os.homedir();
 const myDots = `${HOME}/dots2/`;
@@ -21,6 +22,7 @@ async function linuxSetup() {
     echo('init.sh')
     await $`${myDots}init.sh`
     await $`dconf load /org/gnome/ < ${myDots}config/gnome/gnome.conf`
+    await slinkAll()
 }
 
 async function installNixHomeMgr() {
