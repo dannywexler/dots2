@@ -45,7 +45,7 @@ async function installNixHomeMgr() {
 async function cloneDots() {
     echo('Cloning dots')
     await gitClone('dannywexler', 'dots2', myDots)
-    await $`ln -sf ${myDots}config/home-manager ${HOME}/.config`
+    await $`ln -sf ${myDots}config/home-manager/ ${HOME}/.config/home-manager`
     echo('Installing all home manager packages')
     await $`home-manager switch`
     echo('Dots cloned and home manager packages installed')
