@@ -17,7 +17,10 @@ async function linuxSetup() {
     cd(HOME)
     await installNixHomeMgr()
     await cloneDots()
-    await connectToNas()
+    // await connectToNas()
+    echo('init.sh')
+    await $`${myDots}init.sh`
+    await $`dconf load /org/gnome/ < ${myDots}config/gnome/gnome.conf`
 }
 
 async function installNixHomeMgr() {
