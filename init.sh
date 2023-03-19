@@ -66,4 +66,4 @@ iconsAndThemes &&\
 waterfoxSetup &&\
 echo 'updating font cache' && fc-cache -f -v > /dev/null &&\
 git clone https://github.com/dannywexler/neovim.git ~/.config/nvim &&\
-chsh -s $(which zsh)
+# chsh -s $(which zsh)

@@ -12,7 +12,8 @@ export type ConfigMapping = {
     [program: string]: string | boolean
 }
 
-Object.entries(configMapping).forEach(async ([pkg, dest]) => {
+for (const config of Object.entries(configMapping)) {
+    let [pkg, dest] = config
     if (dest === true) {
         const src = path.join(configSrc, pkg)
         dest = configDest
@@ -25,7 +26,7 @@ Object.entries(configMapping).forEach(async ([pkg, dest]) => {
         const src = path.join(myDots, pkg)
         await symlink(src, dest)
     }
-})
+}
 
 async function symlink(src: string, dest: string) {
     console.log(`linking ${src} -> ${dest}`)
