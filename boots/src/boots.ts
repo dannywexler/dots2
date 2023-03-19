@@ -36,8 +36,10 @@ async function installNixHomeMgr() {
     await $`nix-shell '<home-manager>' -A install`
     echo('Home manager init')
     await $`home-manager switch`
-    echo('Installing git')
-    await $`nix-env -i git`
+    for (const corepack of ['git', 'unar']) {
+        echo(`Installing ${corepack}`)
+        await $`nix-env -i ${corepack}`
+    }
 }
 
 async function cloneDots() {
