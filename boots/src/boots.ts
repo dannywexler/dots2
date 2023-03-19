@@ -18,6 +18,7 @@ async function linuxSetup() {
     echo('Installing Nix')
     await installNixHomeMgr()
     await cloneDots()
+    await connectToNas()
 }
 
 async function installNixHomeMgr() {
@@ -38,6 +39,29 @@ async function cloneDots() {
     echo('dots cloned and software installed')
 }
 
+async function connectToNas() {
+    echo('Connecting to NAS');
+    for (const dir of ['archives', 'general', 'media']) {
+        await addLineToFile(`192.168.0.248:/mnt/user/${dir} /nas/${dir} nfs defaults 0 0`, '/etc/fstab')
+    }
+}
+
 async function gitClone(user: string, repo: string, dest?: string) {
     await $`git clone https://github.com/${user}/${repo} ${dest ?? ''}`
+}
+
+async function addLineToFile(line: string, file: string) {
+    echo(`adding ${line} to ${file}`)
+    if (await $`grep -Fqsx -- "${line}" "${file}"`) {
+        echo('already there')
+        return
+    }
+    try {
+        echo('trying to append without sudo first')
+        await $`echo ${line} >> ${file}`
+    }
+    catch (e) {
+        echo('that failed, reruning with sudo tee')
+        await $`echo "${line}" | sudo tee -- append "${file}`
+    }
 }
