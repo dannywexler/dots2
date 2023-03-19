@@ -22,7 +22,6 @@ neovim
 pcmanfm
 protonvpn-gui
 qemu
-qemu_kvm
 ripgrep
 unar
 unzip
