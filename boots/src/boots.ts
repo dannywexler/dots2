@@ -15,28 +15,35 @@ void async function() {
 
 async function linuxSetup() {
     cd(HOME)
-    echo('Installing Nix')
     await installNixHomeMgr()
     await cloneDots()
     await connectToNas()
 }
 
 async function installNixHomeMgr() {
+    echo('Installing Nix')
+    echo('Downloading nix install script')
     await $`sh <(curl -L https://nixos.org/nix/install) --no-daemon --yes`
     $.prefix += 'source ~/.nix-profile/etc/profile.d/nix.sh; '
+    echo('Adding home manager channel')
     await $`nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager`
+    echo('Updating channels')
     await $`nix-channel --update`
+    echo('Installing home manager')
     await $`nix-shell '<home-manager>' -A install`
+    echo('Home manager init')
     await $`home-manager switch`
+    echo('Installing git')
     await $`nix-env -i git`
 }
 
 async function cloneDots() {
+    echo('Cloning dots')
     await gitClone('dannywexler', 'dots2', myDots)
-    await fs.remove(`${HOME}/.config/nixpkgs`)
-    await fs.ensureSymlink(`${myDots}config/nixpkgs`, `${HOME}/.config/nixpkgs`)
+    await $`ln -sf ${myDots}config/nixpkgs ${HOME}/.config/nixpkgs`
+    echo('Installing all home manager packages')
     await $`home-manager switch`
-    echo('dots cloned and software installed')
+    echo('Dots cloned and home manager packages installed')
 }
 
 async function connectToNas() {
@@ -44,6 +51,7 @@ async function connectToNas() {
     for (const dir of ['archives', 'general', 'media']) {
         await addLineToFile(`192.168.0.248:/mnt/user/${dir} /nas/${dir} nfs defaults 0 0`, '/etc/fstab')
     }
+    echo('Connected to NAS')
 }
 
 async function gitClone(user: string, repo: string, dest?: string) {
