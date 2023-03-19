@@ -34,12 +34,10 @@ export async function slinkAll() {
 
 async function symlink(src: string, dest: string) {
     console.log(`linking ${src} -> ${dest}`)
-    // fs.ensureDirSync(dest)
-    if (fs.pathExistsSync(src)) {
-        // console.log('linking')
+    try {
         await $`ln -sf ${src} ${dest}`
     }
-    else {
-        console.log(chalk.red(`${src} doesn't exist`))
+    catch (e) {
+        console.log(chalk.red('Linking error: ', e))
     }
 }

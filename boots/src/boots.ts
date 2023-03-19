@@ -19,7 +19,7 @@ async function linuxSetup() {
     await installNixHomeMgr()
     await cloneDots()
     // await connectToNas()
-    echo('init.sh')
+    $.verbose = true
     await $`${myDots}init.sh`
     await $`dconf load /org/gnome/ < ${myDots}config/gnome/gnome.conf`
     await slinkAll()
@@ -40,22 +40,13 @@ async function installNixHomeMgr() {
     await $`nix-shell '<home-manager>' -A install`
     echo('Home manager init')
     await $`home-manager switch`
-    for (const corepack of ['git', 'unar']) {
-        echo(`Installing ${corepack}`)
-        await $`nix-env -i ${corepack}`
-    }
 }
 
 async function cloneDots() {
     echo('Cloning dots')
+    await $`nix-env -i git`
     await gitClone('dannywexler', 'dots2', myDots)
-    // maybe remove git here again right before installing git from home manager?
-    // can't have nix-env isntalled git and home-manager installed git
-    // the real question is if the shell after installing home manager would immediately have access to unar?
-    for (const corepack of ['git', 'unar']) {
-        echo(`Installing ${corepack}`)
-        await $`nix-env -e ${corepack}`
-    }
+    await $`nix-env -e git`
     await $`ln -sf ${myDots}config/home-manager/* ${HOME}/.config/home-manager`
     echo('Installing all home manager packages')
     await $`home-manager switch`
