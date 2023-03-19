@@ -27,7 +27,9 @@ async function installNixHomeMgr() {
     echo('Installing Nix')
     echo('Downloading nix install script')
     await $`sh <(curl -L https://nixos.org/nix/install) --no-daemon --yes`
-    $.prefix += 'source ~/.nix-profile/etc/profile.d/nix.sh; '
+    const nixProfile = 'source ~/.nix-profile/etc/profile.d/nix.sh'
+    $.prefix += nixProfile + '; '
+    await $`echo ${nixProfile} >> ${HOME}/.bashrc`
     echo('Adding home manager channel')
     await $`nix-channel --add https://github.com/nix-community/home-manager/archive/master.tar.gz home-manager`
     echo('Updating channels')
@@ -45,7 +47,7 @@ async function installNixHomeMgr() {
 async function cloneDots() {
     echo('Cloning dots')
     await gitClone('dannywexler', 'dots2', myDots)
-    await $`ln -sf ${myDots}config/home-manager/ ${HOME}/.config/home-manager`
+    await $`ln -sf ${myDots}config/home-manager/* ${HOME}/.config/home-manager`
     echo('Installing all home manager packages')
     await $`home-manager switch`
     echo('Dots cloned and home manager packages installed')
