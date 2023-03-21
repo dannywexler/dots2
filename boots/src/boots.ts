@@ -16,13 +16,31 @@ void async function() {
 
 async function linuxSetup() {
     cd(HOME)
-    await installNixHomeMgr()
-    await cloneDots()
+    // await installNixHomeMgr()
+    await archSetup()
     // await connectToNas()
-    $.verbose = true
     await $`${myDots}init.sh`
     await $`dconf load /org/gnome/ < ${myDots}config/gnome/gnome.conf`
     await slinkAll()
+}
+
+async function archSetup() {
+    $.verbose = true
+    await $`sudo pacman -S --needed --noconfirm sd reflector`
+    await $`sudo sd '^#ParallelDownloads = 5' 'ParallelDownloads = 20' /etc/pacman.conf`
+    await $`sudo sd '^#Color' 'Color\nILoveCandy' /etc/pacman.conf`
+    await $`sudo reflector --country US --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist`
+    await yaySetup()
+    await $`yay`
+    await gitClone('dannywexler', 'dots2', myDots)
+}
+
+async function yaySetup() {
+    await $`sudo pacman -S --needed --noconfirm git base-devel`
+    await $`git clone https://aur.archlinux.org/yay-bin`
+    await $`cd yay-bin`
+    await $`makepkg -si ~/yay-bin/PKGBUILD`
+    await $`rm -rf ~/yay-bin`
 }
 
 async function installNixHomeMgr() {
@@ -40,6 +58,7 @@ async function installNixHomeMgr() {
     await $`nix-shell '<home-manager>' -A install`
     echo('Home manager init')
     await $`home-manager switch`
+    await cloneDots()
 }
 
 async function cloneDots() {
@@ -55,38 +74,38 @@ async function cloneDots() {
     echo('Dots cloned and home manager packages installed')
 }
 
-async function connectToNas() {
-    echo('Connecting to NAS');
-    for (const dir of ['archives', 'general', 'media']) {
-        echo('creating ', dir)
-        await $`sudo mkdir -p /nas/${dir}`
-        await addLineToFile(`192.168.0.248:/mnt/user/${dir} /nas/${dir} nfs defaults 0 0`, '/etc/fstab')
-    }
-    echo('Connected to NAS')
-}
+// async function connectToNas() {
+//     echo('Connecting to NAS');
+//     for (const dir of ['archives', 'general', 'media']) {
+//         echo('creating ', dir)
+//         await $`sudo mkdir -p /nas/${dir}`
+//         await addLineToFile(`192.168.0.248:/mnt/user/${dir} /nas/${dir} nfs defaults 0 0`, '/etc/fstab')
+//     }
+//     echo('Connected to NAS')
+// }
 
 async function gitClone(user: string, repo: string, dest?: string) {
     await $`git clone https://github.com/${user}/${repo} ${dest ?? ''}`
 }
 
-async function addLineToFile(line: string, file: string) {
-    echo(`adding ${line} to ${file}`)
-    try {
-        if (await $`grep -Fqsx -- "${line}" "${file}"`) {
-            echo('already there')
-            return
-        }
-        try {
-            echo('trying to append without sudo first')
-            await $`echo ${line} >> ${file}`
-        }
-        catch (e) {
-            echo('that failed ', e)
-            echo('reruning with sudo tee')
-            await $`echo "${line}" | sudo tee -- append "${file}`
-        }
-    }
-    catch (e) {
-        echo('error grepping ', e)
-    }
-}
+// async function addLineToFile(line: string, file: string) {
+//     echo(`adding ${line} to ${file}`)
+//     try {
+//         if (await $`grep -Fqsx -- "${line}" "${file}"`) {
+//             echo('already there')
+//             return
+//         }
+//         try {
+//             echo('trying to append without sudo first')
+//             await $`echo ${line} >> ${file}`
+//         }
+//         catch (e) {
+//             echo('that failed ', e)
+//             echo('reruning with sudo tee')
+//             await $`echo "${line}" | sudo tee --append "${file}`
+//         }
+//     }
+//     catch (e) {
+//         echo('error grepping ', e)
+//     }
+// }
