@@ -26,7 +26,7 @@ async function linuxSetup() {
 
 async function archSetup() {
     $.verbose = true
-    await $`sudo pacman -S --needed --noconfirm sd reflector unar`
+    await $`sudo pacman -S --needed --noconfirm sd reflector unarchiver`
     await $`sudo sd '^#ParallelDownloads = 5' 'ParallelDownloads = 20' /etc/pacman.conf`
     await $`sudo sd '^#Color' 'Color\nILoveCandy' /etc/pacman.conf`
     await $`sudo reflector --country US --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist`
