@@ -35,7 +35,15 @@ export async function slinkAll() {
 async function symlink(src: string, dest: string) {
     console.log(`linking ${src} -> ${dest}`)
     try {
-        await $`ln -sf ${src} ${dest}`
+        if (src.endsWith('/')) {
+            const allFiles = await globby(`${src}*`);
+            await Promise.all(allFiles.map(file => {
+                $`ln -sf ${src}${file} ${dest}`
+            }))
+        }
+        else {
+            await $`ln -sf ${src} ${dest}`
+        }
     }
     catch (e) {
         console.log(chalk.red('Linking error: ', e))

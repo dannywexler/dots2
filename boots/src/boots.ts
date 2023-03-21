@@ -26,12 +26,12 @@ async function linuxSetup() {
 
 async function archSetup() {
     $.verbose = true
-    await $`sudo pacman -S --needed --noconfirm sd reflector`
+    await $`sudo pacman -S --needed --noconfirm sd reflector unar`
     await $`sudo sd '^#ParallelDownloads = 5' 'ParallelDownloads = 20' /etc/pacman.conf`
     await $`sudo sd '^#Color' 'Color\nILoveCandy' /etc/pacman.conf`
     await $`sudo reflector --country US --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist`
     await yaySetup()
-    await $`yay`
+    await $`yay -Syu --needed --noconfirm`
     await gitClone('dannywexler', 'dots2', myDots)
 }
 
