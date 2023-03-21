@@ -38,7 +38,7 @@ async function archSetup() {
 async function yaySetup() {
     await $`sudo pacman -S --needed --noconfirm git base-devel`
     await $`git clone https://aur.archlinux.org/yay-bin`
-    await $`cd yay-bin`
+    cd('yay-bin')
     await $`makepkg -si --needed --noconfirm`
     cd(HOME)
     await $`rm -rf yay-bin`
