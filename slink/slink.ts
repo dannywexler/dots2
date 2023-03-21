@@ -36,9 +36,10 @@ async function symlink(src: string, dest: string) {
     console.log(`linking ${src} -> ${dest}`)
     try {
         if (src.endsWith('/')) {
+            fs.ensureDirSync(dest)
             const allFiles = await globby(`${src}*`);
             await Promise.all(allFiles.map(file => {
-                $`ln -sf ${src}${file} ${dest}`
+                $`ln -sf ${file} ${dest}`
             }))
         }
         else {
