@@ -39,8 +39,9 @@ async function yaySetup() {
     await $`sudo pacman -S --needed --noconfirm git base-devel`
     await $`git clone https://aur.archlinux.org/yay-bin`
     await $`cd yay-bin`
-    await $`makepkg -si ~/yay-bin/PKGBUILD`
-    await $`rm -rf ~/yay-bin`
+    await $`makepkg -si --needed --noconfirm`
+    cd(HOME)
+    await $`rm -rf yay-bin`
 }
 
 async function installNixHomeMgr() {
