@@ -1,6 +1,6 @@
-source /home/danny/dots/apps/appInstall.sh
-source /home/danny/dots/zsh/aliases.sh
-path+=('/home/danny/dots/scripts/')
+source ./aliases.sh
+source ./archHelpers.sh
+# path+=('/home/danny/dots/scripts/')
 
 # The following lines were added by compinstall
 zstyle ':completion:*' auto-description 'specify: %d'
