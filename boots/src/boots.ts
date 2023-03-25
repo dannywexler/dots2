@@ -19,9 +19,10 @@ async function linuxSetup() {
     // await installNixHomeMgr()
     await archSetup()
     // await connectToNas()
+    await $`yay -S --needed --noconfirm - < ${myDots}config/zsh/archPackages.txt`
     await $`${myDots}init.sh`
-    await $`dconf load /org/gnome/ < ${myDots}config/gnome/gnome.conf`
     await slinkAll()
+    await $`dconf load /org/gnome/ < ${myDots}config/gnome/gnome.conf`
 }
 
 async function archSetup() {

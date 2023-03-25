@@ -1,5 +1,5 @@
-source ./aliases.sh
-source ./archHelpers.sh
+source ~/dots2/config/zsh/aliases.sh
+source ~/dots2/config/zsh/archHelpers.sh
 # path+=('/home/danny/dots/scripts/')
 
 # The following lines were added by compinstall
