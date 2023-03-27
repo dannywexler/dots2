@@ -19,7 +19,6 @@ async function linuxSetup() {
     // await installNixHomeMgr()
     await archSetup()
     // await connectToNas()
-    await $`yay -S --needed --noconfirm - < ${myDots}config/zsh/archPackages.txt`
     await $`${myDots}init.sh`
     await slinkAll()
     await $`dconf load /org/gnome/ < ${myDots}config/gnome/gnome.conf`
@@ -32,8 +31,8 @@ async function archSetup() {
     await $`sudo sd '^#Color' 'Color\nILoveCandy' /etc/pacman.conf`
     await $`sudo reflector --country US --latest 20 --protocol https --sort rate --save /etc/pacman.d/mirrorlist`
     await yaySetup()
-    await $`yay -Syu --needed --noconfirm`
     await gitClone('dannywexler', 'dots2', myDots)
+    await $`yay -Syu --needed --noconfirm - < ${myDots}config/zsh/archPackages.txt`
 }
 
 async function yaySetup() {
